@@ -53,12 +53,13 @@ button:disabled{opacity:.4;cursor:default}
 .card.back span{color:#fff;font-size:20px;letter-spacing:1px;text-shadow:0 2px 0 rgba(0,0,0,.4)}
 .tc.pop{animation:land .5s cubic-bezier(.2,.9,.3,1.3)}
 .dot{width:22px;height:22px;border-radius:50%;display:inline-block;vertical-align:middle;border:2px solid #fff;box-shadow:0 0 16px 2px var(--cur);transition:background .4s}
-.hand{display:flex;flex-wrap:wrap;justify-content:center;padding:28px 8px 6px;margin:6px 0}
-.hand button{width:auto;margin:0;padding:0;border:0;background:none;border-radius:12px;transition:transform .2s,filter .2s}
-.hand button+button{margin-left:-12px}
+.hand{--cw:64px;display:flex;flex-wrap:nowrap;justify-content:center;padding:40px 8px 10px;margin:6px 0}
+.hand button{--rot:calc(var(--k)*3.2deg);--y:calc(var(--k)*var(--k)*1.6px);width:auto;margin:0;padding:0;border:0;background:none;border-radius:12px;flex:none;transform:translateY(var(--y)) rotate(var(--rot));transition:translate .2s,rotate .2s,scale .2s,filter .2s}
+.hand button+button{margin-left:calc(-1 * max(12px, (var(--n) * var(--cw) - 100%) / (var(--n) - 1)))}
 .hand button:disabled{filter:brightness(.42) saturate(.6)}
-.hand button:not(:disabled){transform:translateY(-12px)}
-.hand button:not(:disabled):hover{transform:translateY(-26px) scale(1.1);z-index:5;background:none}
+.hand button:not(:disabled){translate:0 -12px}
+.hand button:not(:disabled):active{transform:translateY(var(--y)) rotate(var(--rot))}
+.hand button:not(:disabled):hover{transform:translateY(var(--y)) rotate(var(--rot));translate:0 -32px;rotate:calc(var(--rot) * -1);scale:1.12;z-index:5;background:none}
 .hand button.in{animation:deal .55s cubic-bezier(.2,.9,.3,1.2) backwards;animation-delay:calc(var(--i)*70ms)}
 .status{text-align:center;font:800 24px var(--hd);letter-spacing:.08em;text-transform:uppercase;margin:12px 0}
 .status.me{color:var(--cur);text-shadow:0 0 18px var(--cur);animation:blink 1.2s infinite}
@@ -70,7 +71,7 @@ button:disabled{opacity:.4;cursor:default}
 .code{font:900 64px var(--hd);letter-spacing:.3em;text-align:center;margin:8px 0;padding-left:.3em;animation:rise .5s both;text-shadow:0 0 30px var(--R)}
 details{margin-top:16px;font-size:14px;color:var(--mut)}li{margin:3px 0}summary{cursor:pointer;font:700 15px var(--hd);letter-spacing:.1em;text-transform:uppercase}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-@keyframes deal{from{opacity:0;transform:translateY(-160px) rotate(-20deg) scale(.5)}to{opacity:1;transform:none}}
+@keyframes deal{from{opacity:0;transform:translateY(-160px) rotate(-20deg) scale(.5)}to{opacity:1;transform:translateY(var(--y)) rotate(var(--rot))}}
 @keyframes land{from{opacity:0;transform:translateY(120px) rotate(28deg) scale(1.3)}to{opacity:1;transform:none}}
 @keyframes flip{0%{transform:perspective(900px) rotateY(0)}50%{transform:perspective(900px) rotateY(90deg)}100%{transform:perspective(900px) rotateY(0)}}
 @keyframes pulse{50%{filter:brightness(1.3)}}
@@ -78,15 +79,32 @@ details{margin-top:16px;font-size:14px;color:var(--mut)}li{margin:3px 0}summary{
 @keyframes throb{50%{transform:scale(1.07) rotate(-2deg)}}
 @keyframes shine{to{left:130%}}
 @keyframes breathe{50%{opacity:.3;transform:scale(1.08)}}
-@media(max-width:560px){h1{font-size:36px}.card{width:54px;height:81px}.card span{font-size:32px}.card.s span{font-size:18px}.table{gap:14px}.code{font-size:48px}}
+@media(max-width:560px){.hand{--cw:54px}h1{font-size:36px}.card{width:54px;height:81px}.card span{font-size:32px}.card.s span{font-size:18px}.table{gap:14px}.code{font-size:48px}}
+.popup{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:100;pointer-events:none;padding:20px}
+.popup div{background:#141416;border:3px solid var(--R);border-radius:20px;padding:22px 38px;text-align:center;font:900 40px/1.1 var(--hd);text-transform:uppercase;box-shadow:0 0 80px rgba(255,59,71,.55);animation:popin .4s cubic-bezier(.2,1.4,.4,1),popout .4s 2.6s forwards}
+.popup small{display:block;margin-top:8px;font:600 15px var(--hd);letter-spacing:.12em;color:var(--mut)}
+.edge{position:fixed;inset:0;pointer-events:none;z-index:95;box-shadow:inset 0 0 0 8px var(--fc),inset 0 0 120px 24px var(--fc);animation:edge .85s ease-out forwards}
+body.warn::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:90;box-shadow:inset 0 0 0 6px var(--R),inset 0 0 90px 10px rgba(255,59,71,.55);animation:pulse 1s infinite}
+@keyframes dash{to{stroke-dashoffset:-24}}
+@keyframes popin{from{transform:scale(.3) rotate(-6deg);opacity:0}}
+@keyframes popout{to{opacity:0;transform:scale(.9)}}
+@keyframes edge{from{opacity:1}to{opacity:0}}
+@media(min-width:561px){
+.hand{--cw:78px;padding-top:62px;padding-bottom:14px}
+.hand .card{width:78px;height:117px}
+.hand .card span{font-size:46px}.hand .card.s span{font-size:25px}.hand .card i{font-size:17px}
+.hand button{--rot:calc(var(--k)*min(5.5deg,52deg/max(1,var(--n) - 1)));--y:calc(var(--k)*var(--k)*min(3px,90px/max(1,var(--n)*var(--n)/4)))}
+.hand button+button{margin-left:calc(-1*max(24px,(var(--n)*var(--cw) - 100%)/(var(--n) - 1)))}
+}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 .arena{position:relative;width:100%;aspect-ratio:1/.85;max-height:64vh;margin:10px auto 34px}
 .felt{position:absolute;inset:12% 7%;border-radius:50%;background:#2b2b30;border:6px solid var(--R);box-shadow:none;display:flex;align-items:center;justify-content:center;transition:background .5s,border-color .5s}
 .felt.dark{background:#34353b;border-color:#00e5ff}
 .felt.flip{animation:flipflat .7s ease}
 @keyframes flipflat{50%{transform:scaleX(.04)}}
-.ring{position:absolute;inset:9%;border-radius:50%;border:2px dashed rgba(255,255,255,.28);animation:spin 24s linear infinite}
-.ring.rev{animation-direction:reverse}
+.ring{position:absolute;left:7%;top:7%;width:86%;height:86%;overflow:visible;pointer-events:none}
+.ring ellipse{fill:none;stroke:var(--cur);stroke-width:3;stroke-dasharray:12 12;stroke-linecap:round;opacity:.8;animation:dash 1.1s linear infinite;transition:stroke .5s}
+.ring.rev ellipse{animation-direction:reverse}
 .mid{position:relative;display:flex;gap:16px;align-items:center;z-index:1}
 .mid button{width:auto;margin:0;padding:0;border:0;background:none;border-radius:12px}
 .mid button:not(:disabled) .card.back{animation:throb 1.3s infinite}
@@ -114,7 +132,7 @@ const COL={R:'Rot',Y:'Gelb',G:'Grün',B:'Blau',P:'Pink',T:'Türkis',O:'Orange',U
 const VAL={D:2,Q:4,F:4,A:6,T:10,N:1,H:2,V:5};const IM={};const fc=(g,c)=>g.side?{c:c.C,v:c.V}:c;
 const LBL={D:'+2',Q:'+4',R:'⇄',S:'⊘',E:'⊘ Alle',X:'Alle ✖',F:'⇄ +4',A:'+6',T:'+10',L:'🎲',N:'+1',V:'+5',Z:'⟲ Flip',W:'★',H:'+2',K:'+Farbe'};
 const NAME={D:'+2',Q:'+4',R:'Richtungswechsel',S:'Aussetzen',E:'Alle aussetzen',X:'Alle Farbe ablegen',F:'Richtungswechsel +4',A:'+6',T:'+10',L:'Farbroulette',N:'+1',V:'+5',Z:'Flip',W:'Wild',H:'Wild +2',K:'Wild +Farbe'};
-const seen={h:0,d:0,s:0,c:{},k:0};let mode='all',db=null,uid=null,code='',unsub=null,G=null,name='',pending=null;
+const seen={h:0,d:0,s:0,c:{},k:0,o:{},col:''};let mode='all',db=null,uid=null,code='',unsub=null,G=null,name='',pending=null;
 try{name=localStorage.getItem('uno-name')||''}catch(e){}
 
 /* ---------- Spiellogik ---------- */
@@ -162,7 +180,7 @@ async function start(){
  const g=structuredClone(G);g.deck=shuf(g.mode==='flip'?mkFlip():g.mode==='nm'?mkDeck():mkAll());g.side=0;g.hands={};
  g.players.forEach(p=>{p.out=false;g.hands[p.id]=draw(g,7)});
  let t;do{t=g.deck.pop();if(t.c==='W')g.deck.unshift(t)}while(t.c==='W');
- g.discard=[t];g.color=t.c;g.turn=0;g.dir=1;g.pen=0;g.penv=0;g.status='playing';g.winner='';g.log=['Spiel gestartet'];await put(g)}
+ g.discard=[t];g.color=t.c;g.turn=0;g.dir=1;g.pen=0;g.penv=0;g.drew=false;g.status='playing';g.winner='';g.log=['Spiel gestartet'];await put(g)}
 
 async function play(i,o={}){
  const g=structuredClone(G);if(g.status!=='playing'||g.players[g.turn].id!==uid)return;
@@ -182,23 +200,27 @@ async function play(i,o={}){
  if(c.v==='0'&&g.mode!=='flip'){const P=g.players.filter(p=>!p.out),H=P.map(p=>g.hands[p.id]);P.forEach((p,k)=>g.hands[P[(k+g.dir+P.length)%P.length].id]=H[k]);m+=' – alle geben ihre Karten weiter'}
  if(c.v==='7'&&o.p){const t=g.players.find(p=>p.id===o.p);[g.hands[uid],g.hands[o.p]]=[g.hands[o.p],g.hands[uid]];m+=' – tauscht mit '+t.name}
  if(g.hands[uid].length===1)m+=' – UNO!';
- g.log.push(m);chk(g);if(g.status==='playing')g.turn=at(g,step);await put(g)}
+ g.log.push(m);g.drew=false;chk(g);if(g.status==='playing')g.turn=at(g,step);await put(g)}
 async function takePen(){
  const g=structuredClone(G);if(g.status!=='playing'||g.players[g.turn].id!==uid||!(g.pen>0))return;
  g.hands[uid].push(...draw(g,g.pen));g.log.push(g.players[g.turn].name+' zieht '+g.pen+' Strafkarten');g.pen=0;g.penv=0;chk(g);
  if(g.status==='playing')g.turn=at(g,1);await put(g)}
-async function drawOne(){ // ziehen, bis eine Karte passt
- const g=structuredClone(G);if(g.status!=='playing'||g.players[g.turn].id!==uid)return;
- const me=g.players[g.turn],h=()=>g.hands[uid];if(h().some(c=>can(g,c)))return;
- let n=0;while(!h().some(c=>can(g,c))){const [x]=draw(g,1);if(!x)break;h().push(x);n++;if(h().length>=25||g.mode==='flip')break}
- g.log.push(me.name+' zieht '+n+' Karten');chk(g);
- if(g.status==='playing'&&(me.out||!h().some(c=>can(g,c))))g.turn=at(g,1);await put(g)}
+async function drawOne(){ // genau eine Karte ziehen, jederzeit auf eigenem Zug
+ const g=structuredClone(G);if(g.status!=='playing'||g.players[g.turn].id!==uid||g.pen>0||g.drew)return;
+ const me=g.players[g.turn],[x]=draw(g,1);if(x)g.hands[uid].push(x);
+ g.log.push(me.name+' zieht eine Karte');chk(g);
+ if(g.status==='playing'){if(!me.out&&x&&can(g,x))g.drew=true;else g.turn=at(g,1)}
+ await put(g)}
 
 /* ---------- Oberfläche ---------- */
 const face=c=>{const f=fc(G,c),l=LBL[f.v]||f.v,k=l.length>2?'':l;return `<div class="card ${f.c==='W'?'W':''} ${G.side?'dk':''} ${l.length>2?'s':''}" style="--c:var(--${f.c==='W'?'K':f.c})"><i>${k}</i><span>${l}</span><i class="b">${k}</i></div>`};
 function getName(){name=($('#nm').value||'').trim().slice(0,14);if(!name){msg('Bitte gib einen Namen ein');return false}
  try{localStorage.setItem('uno-name',name)}catch(e){}return true}
 
+function popup(t,sub){const e=document.createElement('div');e.className='popup';e.innerHTML=`<div>${esc(t)}<small>${esc(sub)}</small></div>`;document.body.appendChild(e);setTimeout(()=>e.remove(),3100)}
+function flash(c){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;const e=document.createElement('div');e.className='edge';e.style.setProperty('--fc','var(--'+c+')');document.body.appendChild(e);setTimeout(()=>e.remove(),900)}
+function fitRing(){const r=$('.ring');if(!r)return;const b=r.getBoundingClientRect(),e=r.firstElementChild;r.setAttribute('viewBox','0 0 '+b.width+' '+b.height);e.setAttribute('cx',b.width/2);e.setAttribute('cy',b.height/2);e.setAttribute('rx',Math.max(1,b.width/2-2));e.setAttribute('ry',Math.max(1,b.height/2-2))}
+addEventListener('resize',fitRing);
 function fly(a,b,d){
  if(!a||!b||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
  const A=a.getBoundingClientRect(),B=b.getBoundingClientRect(),e=document.createElement('div');e.className='fly';document.body.appendChild(e);
@@ -211,10 +233,10 @@ function flights(sn,cnt){
   if(fresh)for(let j=0;j<Math.min(n,7);j++)fly(pile,s,j*90+i*45);
   else if(n>o&&dd>0)for(let j=0;j<Math.min(n-o,6);j++)fly(pile,s,j*110);
   else if(n<o&&played)for(let j=0;j<Math.min(o-n,3);j++)fly(s,mid,j*120)})}
-function render(){
+function render(){document.body.classList.remove('warn');
  const A=$('#app');
  if(!db||!uid){A.innerHTML='<div class="box"><h1>UNO<span>No Mercy</span></h1><p class="mut">Keine Verbindung zum Server. Bitte lade die Seite neu.</p></div>';return}
- const rules=`<details><summary>Kartenregeln</summary><ul><li><b>Zieh-Karten</b> (+1, +2, +4, +5, +6, +10, ⇄ +4): Alle stapeln untereinander, auch +2 auf +4. Wer keine hat, zieht alles.</li><li><b>⇄ +4</b> (Wild): Richtungswechsel und +4, stapelbar.</li><li><b>⊘ Aussetzen</b>, <b>⊘ Alle</b>: Alle anderen werden übersprungen, du bist nochmal dran.</li><li><b>Alle ✖</b>: Legt alle Karten dieser Farbe aus deiner Hand ab.</li><li><b>🎲 Farbroulette</b>: Nächster zieht, bis die gewählte Farbe kommt, und setzt aus.</li><li><b>7</b>: Hände mit einem Mitspieler tauschen. <b>0</b>: Alle geben ihre Hand in Spielrichtung weiter.</li><li>Kannst du nichts legen, ziehst du, bis etwas passt.</li><li><b>Mercy</b>: Wer 25 oder mehr Karten hat, scheidet aus.</li></ul><p><b>Flip:</b> Zwei Seiten (Light: Rot/Gelb/Grün/Blau, Dark: Pink/Türkis/Orange/Lila). Die Flip-Karte dreht alle Karten um. Dazu kommen +1, +5, Wild +2 und Wild +Farbe (der Nächste zieht, bis die Farbe kommt).</p></details>`;
+ const rules=`<details><summary>Kartenregeln</summary><ul><li><b>Zieh-Karten</b> (+1, +2, +4, +5, +6, +10, ⇄ +4): Alle stapeln untereinander, auch +2 auf +4. Wer keine hat, zieht alles.</li><li><b>⇄ +4</b> (Wild): Richtungswechsel und +4, stapelbar.</li><li><b>⊘ Aussetzen</b>, <b>⊘ Alle</b>: Alle anderen werden übersprungen, du bist nochmal dran.</li><li><b>Alle ✖</b>: Legt alle Karten dieser Farbe aus deiner Hand ab.</li><li><b>🎲 Farbroulette</b>: Nächster zieht, bis die gewählte Farbe kommt, und setzt aus.</li><li><b>7</b>: Hände mit einem Mitspieler tauschen. <b>0</b>: Alle geben ihre Hand in Spielrichtung weiter.</li><li>Du kannst jederzeit genau eine Karte ziehen. Passt sie, darfst du sie legen, sonst ist der Nächste dran.</li><li><b>Mercy</b>: Wer 25 oder mehr Karten hat, scheidet aus.</li></ul><p><b>Flip:</b> Zwei Seiten (Light: Rot/Gelb/Grün/Blau, Dark: Pink/Türkis/Orange/Lila). Die Flip-Karte dreht alle Karten um. Dazu kommen +1, +5, Wild +2 und Wild +Farbe (der Nächste zieht, bis die Farbe kommt).</p></details>`;
  if(!G){A.innerHTML=`<div class="box"><h1>UNO<span>Online</span></h1>
   <label>Dein Name</label><input id="nm" maxlength="14" value="${esc(name)}">
   <p class="mut">Alle Karten aus UNO No Mercy und UNO Flip in einem Deck.</p>
@@ -224,11 +246,11 @@ function render(){
   <button data-a="join">Beitreten</button><p id="msg" class="mut"></p>${rules}</div>`;return}
  const head=`<div class="top"><h1>UNO<span>${esc(G.code)}</span></h1><button data-a="leave">Verlassen</button></div>`;
  const pls=G.players.map((p,i)=>{const n=(G.hands[p.id]||[]).length;return `<div class="pl ${p.out?'out':''} ${G.status==='playing'&&i===G.turn?'on':''}">${esc(p.name)}${p.id===uid?' (du)':''}${G.status==='lobby'?'':`<b class="${n>=20?'w':''}">${n}</b>`}</div>`}).join('');
- if(G.status==='lobby'){seen.h=seen.d=seen.s=0;seen.c={};seen.k=0;
+ if(G.status==='lobby'){seen.h=seen.d=seen.s=0;seen.c={};seen.k=0;seen.o={};seen.col='';
   A.innerHTML=head+`<p class="mut">Modus: ${G.mode==='flip'?'UNO Flip':G.mode==='nm'?'UNO No Mercy':'No Mercy + Flip'}. Teile diesen Code mit deinen Freunden (2 bis 8 Spieler):</p><div class="code">${esc(G.code)}</div><div class="pls">${pls}</div>`+
    (G.host===uid?`<button class="pri" data-a="start" ${G.players.length<2?'disabled':''}>Spiel starten</button>`:'<p class="status mut">Warte auf den Start durch den Host …</p>')+'<p id="msg" class="mut"></p>'+rules;return}
  const top=G.discard.at(-1),my=G.hands[uid]||[],playing=G.status==='playing',mine=playing&&G.players[G.turn].id===uid,out=G.players.find(p=>p.id===uid)?.out;
- const has=my.some(c=>can(G,c));const sn={...seen};const cnt={};G.players.forEach(p=>cnt[p.id]=(G.hands[p.id]||[]).length);seen.h=my.length;seen.d=G.discard.length;seen.s=G.side;seen.c=cnt;seen.k=G.deck.length;
+ const has=my.some(c=>can(G,c));const sn={...seen};const cnt={};G.players.forEach(p=>cnt[p.id]=(G.hands[p.id]||[]).length);seen.h=my.length;seen.d=G.discard.length;seen.s=G.side;seen.c=cnt;seen.k=G.deck.length;const od={};G.players.forEach(p=>{od[p.id]=!!p.out;if(sn.d&&p.out&&sn.o[p.id]===false)popup(p.id===uid?'Du bist ausgeschieden':p.name+' scheidet aus','25 Karten erreicht – Mercy-Regel')});seen.o=od;if(sn.d&&sn.col&&sn.col!==G.color)flash(G.color);seen.col=G.color;document.body.classList.toggle('warn',my.length>=20);
  const meI=Math.max(0,G.players.findIndex(p=>p.id===uid)),np=G.players.length;
  const seats=G.players.map((p,i)=>{const k=(i-meI+np)%np,a=(90+k*360/np)*Math.PI/180,c=cnt[p.id],m=Math.min(c,12);
   const fan=p.id===uid?'':Array.from({length:m},(_,j)=>`<i class="mc" style="--r:${(j-m/2)*7}deg"></i>`).join('');
@@ -238,15 +260,15 @@ function render(){
  let pick='';
  if(pending?.k==='col')pick=`<div class="status">Wähle eine Farbe:</div><div class="pick">${(G.side?'PTOU':'RYGB').split('').map(c=>`<button data-a="col" data-c="${c}" style="--c:var(--${c})" aria-label="${COL[c]}"></button>`).join('')}</div>`;
  if(pending?.k==='tgt')pick=`<div class="status">Mit wem tauschen?</div><div class="pick">${G.players.filter(p=>!p.out&&p.id!==uid).map(p=>`<button class="t" data-a="tgt" data-p="${esc(p.id)}">${esc(p.name)} (${G.hands[p.id].length})</button>`).join('')}</div>`;
- A.innerHTML=head+`<div class="arena"><div class="felt ${G.side?'dark':''} ${sn.d&&sn.s!==G.side?'flip':''}"><div class="ring ${G.dir<0?'rev':''}"></div>
-  <div class="mid"><button id="pile" data-a="${dr}" ${mine&&(G.pen>0||!has)?'':'disabled'}><div class="card back"><span>${G.pen>0?'+'+G.pen:'UNO'}</span></div></button>
+ A.innerHTML=head+`<div class="arena"><div class="felt ${G.side?'dark':''} ${sn.d&&sn.s!==G.side?'flip':''}"><svg class="ring ${G.dir<0?'rev':''}"><ellipse></ellipse></svg>
+  <div class="mid"><button id="pile" data-a="${dr}" ${mine&&!G.drew?'':'disabled'}><div class="card back"><span>${G.pen>0?'+'+G.pen:'UNO'}</span></div></button>
   <div class="tc ${sn.d&&G.discard.length!==sn.d?'pop':''}">${face(top)}</div>
   <div class="info">${G.side?'🌑 Dark':'☀️ Light'}<br><span class="dot" style="background:var(--${G.color})"></span><br>${COL[G.color]}</div></div></div>${seats}</div>`+
   (playing&&G.pen>0?`<div class="banner">Strafe: +${G.pen} – mit beliebiger Zieh-Karte stapeln, sonst ziehen</div>`:'')+
   `<div class="status ${mine?'me':''}">${status}</div>`+pick+
-  `<div class="hand">${my.map((c,i)=>`<button class="${i>=sn.h?'in':''}" style="--i:${Math.min(i-sn.h,10)}" data-a="play" data-i="${i}" ${mine&&can(G,c)&&!pending?'':'disabled'}>${face(c)}</button>`).join('')}</div>`+
+  `<div class="hand" style="--n:${my.length}">${my.map((c,i)=>`<button class="${i>=sn.h?'in':''}" style="--i:${Math.min(i-sn.h,10)};--k:${i-(my.length-1)/2}" data-a="play" data-i="${i}" ${mine&&can(G,c)&&!pending?'':'disabled'}>${face(c)}</button>`).join('')}</div>`+
   (G.status==='done'&&G.host===uid?'<button class="pri" data-a="start">Neue Runde</button>':'')+
-  `<div class="log">${G.log.map(esc).join('<br>')}</div><p id="msg" class="mut"></p>`;flights(sn,cnt);
+  `<p id="msg" class="mut"></p>`;flights(sn,cnt);fitRing();
 }
 
 $('#app').addEventListener('click',async e=>{
@@ -263,7 +285,7 @@ $('#app').addEventListener('click',async e=>{
   else await play(i)}
  else if(a==='col'){const i=pending.i;pending=null;await play(i,{col:b.dataset.c})}
  else if(a==='tgt'){const i=pending.i;pending=null;await play(i,{p:b.dataset.p})}
- else if(a==='leave'){seen.h=seen.d=seen.s=0;seen.c={};seen.k=0;unsub&&unsub();unsub=null;G=null;pending=null;render()}
+ else if(a==='leave'){seen.h=seen.d=seen.s=0;seen.c={};seen.k=0;seen.o={};seen.col='';unsub&&unsub();unsub=null;G=null;pending=null;render()}
 });
 
 /* ---------- Eigener Backend-Ersatz (WebSocket) statt Claude-Datenbank ---------- */
