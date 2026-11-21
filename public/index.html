@@ -39,7 +39,7 @@ button:disabled{opacity:.4;cursor:default}
 .table.flip{animation:flip .9s ease}
 .table button{width:auto;margin:0;padding:0;border:0;background:none;border-radius:12px}
 .table button:not(:disabled) .card.back{animation:throb 1.3s infinite}
-.card{position:relative;width:64px;height:96px;border-radius:12px;background:var(--c,var(--K));border:3px solid #fff;color:#fff;font-family:var(--hd);font-weight:900;box-shadow:0 8px 18px rgba(0,0,0,.55);flex:none;overflow:hidden;user-select:none}
+.card{position:relative;width:64px;aspect-ratio:152/242;border-radius:12px;background:var(--c,var(--K));border:3px solid #fff;color:#fff;font-family:var(--hd);font-weight:900;box-shadow:0 8px 18px rgba(0,0,0,.55);flex:none;overflow:hidden;user-select:none}
 .card::before{content:"";position:absolute;left:-22%;right:-22%;top:15%;bottom:15%;background:#fff;border-radius:50%;transform:rotate(-30deg)}
 .card span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;font-size:38px;line-height:1;color:var(--c);text-shadow:0 1px 0 rgba(0,0,0,.35),0 0 8px rgba(0,0,0,.18);z-index:1}
 .card.s span{font-size:21px}
@@ -79,9 +79,9 @@ details{margin-top:16px;font-size:14px;color:var(--mut)}li{margin:3px 0}summary{
 @keyframes throb{50%{transform:scale(1.07) rotate(-2deg)}}
 @keyframes shine{to{left:130%}}
 @keyframes breathe{50%{opacity:.3;transform:scale(1.08)}}
-@media(max-width:560px){.hand{--cw:54px}h1{font-size:36px}.card{width:54px;height:81px}.card span{font-size:32px}.card.s span{font-size:18px}.table{gap:14px}.code{font-size:48px}}
+@media(max-width:560px){.hand{--cw:54px}h1{font-size:36px}.card{width:54px}.card span{font-size:32px}.card.s span{font-size:18px}.table{gap:14px}.code{font-size:48px}}
 .mc,.fly{position:relative;display:block;width:24px;height:38px;background:url(cards/light.png) no-repeat 0 0/1200% 600%;transform:rotate(var(--r,0deg));flex:none;margin-left:-14px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))}
-.card.sp{width:auto!important;aspect-ratio:152/242;background:url(cards/light.png) no-repeat;background-size:1200% 600%;background-position:calc(var(--cx)*100%/11) calc(var(--cy)*100%/5);border:0;border-radius:0;overflow:visible;box-shadow:none;filter:hue-rotate(var(--hue,0deg)) drop-shadow(0 6px 8px rgba(0,0,0,.5))}
+.card.sp{height:auto!important;aspect-ratio:152/242;background:url(cards/light.png) no-repeat;background-size:1200% 600%;background-position:calc(var(--cx)*100%/11) calc(var(--cy)*100%/5);border:0;border-radius:0;overflow:visible;box-shadow:none;filter:hue-rotate(var(--hue,0deg)) drop-shadow(0 6px 8px rgba(0,0,0,.5))}
 .card.sp.b{background-image:url(cards/dark.png)}
 .card.sp.n{background-image:url(cards/nomercy.png)}
 .card.sp::before{display:none}
@@ -98,7 +98,7 @@ body.warn::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:
 @keyframes edge{from{opacity:1}to{opacity:0}}
 @media(min-width:561px){
 .hand{--cw:78px;padding-top:62px;padding-bottom:14px}
-.hand .card{width:78px;height:117px}
+.hand .card{width:78px}
 .hand .card span{font-size:46px}.hand .card.s span{font-size:25px}.hand .card i{font-size:17px}
 .hand button{--rot:calc(var(--k)*min(5.5deg,52deg/max(1,var(--n) - 1)));--y:calc(var(--k)*var(--k)*min(3px,90px/max(1,var(--n)*var(--n)/4)))}
 .hand button+button{margin-left:calc(-1*max(24px,(var(--n)*var(--cw) - 100%)/(var(--n) - 1)))}
