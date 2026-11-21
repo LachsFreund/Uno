@@ -80,10 +80,10 @@ details{margin-top:16px;font-size:14px;color:var(--mut)}li{margin:3px 0}summary{
 @keyframes shine{to{left:130%}}
 @keyframes breathe{50%{opacity:.3;transform:scale(1.08)}}
 @media(max-width:560px){.hand{--cw:54px}h1{font-size:36px}.card{width:54px}.card span{font-size:32px}.card.s span{font-size:18px}.table{gap:14px}.code{font-size:48px}}
-.mc,.fly{position:relative;display:block;width:24px;height:38px;background:url(cards/light.png) no-repeat 0 0/1200% 600%;transform:rotate(var(--r,0deg));flex:none;margin-left:-14px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))}
-.card.sp{height:auto!important;aspect-ratio:152/242;background:url(cards/light.png) no-repeat;background-size:1200% 600%;background-position:calc(var(--cx)*100%/11) calc(var(--cy)*100%/5);border:0;border-radius:0;overflow:visible;box-shadow:none;filter:hue-rotate(var(--hue,0deg)) drop-shadow(0 6px 8px rgba(0,0,0,.5))}
-.card.sp.b{background-image:url(cards/dark.png)}
-.card.sp.n{background-image:url(cards/nomercy.png)}
+.mc,.fly{position:relative;display:block;width:24px;height:38px;background:url(cards/atlas-light.png) no-repeat 0 0/1200% 600%;transform:rotate(var(--r,0deg));flex:none;margin-left:-14px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))}
+.card.sp{height:auto!important;aspect-ratio:152/242;background:url(cards/atlas-light.png) no-repeat;background-size:1200% 600%;background-position:calc(var(--cx)*100%/11) calc(var(--cy)*100%/5);border:0;border-radius:0;overflow:visible;box-shadow:none;filter:hue-rotate(var(--hue,0deg)) drop-shadow(0 6px 8px rgba(0,0,0,.5))}
+.card.sp.b{background-image:url(cards/atlas-dark.png)}
+.card.sp.n{background-image:url(cards/atlas-nomercy.png)}
 .card.sp::before{display:none}
 .pn{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:900 34px var(--hd);color:#fff;text-shadow:0 0 6px #000,0 0 14px #000}
 .tmr{margin-left:8px;color:var(--R);font-size:14px}.tmr:empty{display:none}
@@ -264,6 +264,7 @@ function popup(t,sub){const e=document.createElement('div');e.className='popup';
 function flash(c){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;const e=document.createElement('div');e.className='edge';e.style.setProperty('--fc','var(--'+c+')');document.body.appendChild(e);setTimeout(()=>e.remove(),900)}
 function fitRing(){const r=$('.ring');if(!r)return;const b=r.getBoundingClientRect(),e=r.firstElementChild;r.setAttribute('viewBox','0 0 '+b.width+' '+b.height);e.setAttribute('cx',b.width/2);e.setAttribute('cy',b.height/2);e.setAttribute('rx',Math.max(1,b.width/2-2));e.setAttribute('ry',Math.max(1,b.height/2-2))}
 addEventListener('resize',fitRing);
+['light','dark','nomercy'].forEach(n=>{const i=new Image();i.onload=()=>{if(i.naturalWidth!==1824||i.naturalHeight!==1452)setTimeout(()=>popup('Kartenbild falsch','atlas-'+n+'.png ist '+i.naturalWidth+'×'+i.naturalHeight+' statt 1824×1452'),800)};i.onerror=()=>setTimeout(()=>popup('Kartenbild fehlt','cards/atlas-'+n+'.png nicht gefunden'),800);i.src='cards/atlas-'+n+'.png'});
 function fly(a,b,d){
  if(!a||!b||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
  const A=a.getBoundingClientRect(),B=b.getBoundingClientRect(),e=document.createElement('div');e.className='fly';document.body.appendChild(e);
