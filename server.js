@@ -16,7 +16,7 @@ const send = (ws, o) => ws.readyState === 1 && ws.send(JSON.stringify(o));
 const docOf = p => docs.get(p)?.data ?? null;
 
 function broadcast(p) {
-  subs.get(p)?.forEach(c => send(c, { t: 'doc', path: p, data: docOf(p) }));
+  subs.get(p)?.forEach(c => send(c, { t: 'doc', path: p, data: docOf(p), now: Date.now() }));
 }
 
 wss.on('connection', ws => {
@@ -27,16 +27,23 @@ wss.on('connection', ws => {
     let m;
     try { m = JSON.parse(raw); } catch { return; }
     if (!okPath(m.path)) return;
-    if (m.t === 'get') send(ws, { t: 'res', id: m.id, data: docOf(m.path) });
+    if (m.t === 'get') send(ws, { t: 'res', id: m.id, data: docOf(m.path), now: Date.now() });
     else if (m.t === 'set') {
+      const cur = docs.get(m.path)?.data;
+      // Veraltete Schreibzugriffe ablehnen (verhindert doppelte Züge/Strafen)
+      if (m.ifV !== undefined && cur && (cur.v || 0) !== m.ifV) {
+        send(ws, { t: 'res', id: m.id, data: false, now: Date.now() });
+        return;
+      }
+      if (m.data && typeof m.data === 'object') m.data.ts = Date.now(); // Zugstart in Serverzeit
       docs.set(m.path, { data: m.data, t: Date.now() });
-      send(ws, { t: 'res', id: m.id, data: true });
+      send(ws, { t: 'res', id: m.id, data: true, now: Date.now() });
       broadcast(m.path);
     } else if (m.t === 'sub') {
       if (!subs.has(m.path)) subs.set(m.path, new Set());
       subs.get(m.path).add(ws);
       ws.paths.add(m.path);
-      send(ws, { t: 'doc', path: m.path, data: docOf(m.path) });
+      send(ws, { t: 'doc', path: m.path, data: docOf(m.path), now: Date.now() });
     } else if (m.t === 'unsub') {
       subs.get(m.path)?.delete(ws);
       ws.paths.delete(m.path);
